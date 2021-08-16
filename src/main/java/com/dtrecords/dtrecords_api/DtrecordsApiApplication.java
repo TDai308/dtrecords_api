@@ -1,8 +1,7 @@
 package com.dtrecords.dtrecords_api;
 
-import com.dtrecords.dtrecords_api.domain.Role;
-import com.dtrecords.dtrecords_api.service.RoleService;
-import com.dtrecords.dtrecords_api.service.UserService;
+import com.dtrecords.dtrecords_api.domain.Genre;
+import com.dtrecords.dtrecords_api.service.GenreService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,5 +20,19 @@ public class DtrecordsApiApplication {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    CommandLineRunner runner(GenreService genreService) {
+        return args -> {
+            genreService.save(new Genre(null,"Pop"));
+            genreService.save(new Genre(null,"Rock"));
+            genreService.save(new Genre(null,"R&B"));
+            genreService.save(new Genre(null,"HipHop"));
+            genreService.save(new Genre(null,"Country"));
+            genreService.save(new Genre(null,"EDM"));
+            genreService.save(new Genre(null,"Indie"));
+            genreService.save(new Genre(null,"Jazz"));
+        };
     }
 }
