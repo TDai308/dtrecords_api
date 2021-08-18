@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -33,18 +32,16 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
         } else {
             String authorizationHeader = request.getHeader(AUTHORIZATION);
-            if (authorizationHeader != null && authorizationHeader.startsWith("bearer ")) {
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 try {
                     String token = authorizationHeader.substring("Bearer ".length());
                     Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
                     JWTVerifier verifier = JWT.require(algorithm).build();
-                    DecodedJWT decodedJWT =verifier.verify(token);
+                    DecodedJWT decodedJWT = verifier.verify(token);
                     String userName = decodedJWT.getSubject();
                     String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                    stream(roles).forEach(role -> {
-                        authorities.add(new SimpleGrantedAuthority(role));
-                    });
+                    stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                             new UsernamePasswordAuthenticationToken(userName, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);

@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByUserName(username);
+        User user = userRepository.findByUserName(username);
         if (user == null) {
             log.error("User not fond in the database");
             throw new UsernameNotFoundException("User not fond in the database");
@@ -65,9 +65,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             log.info("User fond in the database: {}", username);
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        user.getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-        });
+        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRoleName())));
         return new org.springframework.security.core.userdetails.User(user.getUserName(),user.getPassword(),authorities);
     }
 }
