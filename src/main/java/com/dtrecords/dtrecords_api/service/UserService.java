@@ -10,6 +10,8 @@ public interface UserService{
 
     void addRoleToUser(Long idUser, Long idRole);
 
+    User findByEmail(String email);
+
     void save(User user);
 
     void remove(Long id);
