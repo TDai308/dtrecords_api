@@ -17,13 +17,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@Slf4j
-@CrossOrigin(origins = "http://localhost:3000")
 public class HomeController {
     private final UserService userService;
 
@@ -33,20 +35,15 @@ public class HomeController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<User> getUser() {
-        org.springframework.security.core.userdetails.User userDetail = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email = userDetail.getUsername();
-        log.info("email " + email);
+    public ResponseEntity<User> getUser(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+        String token = authorizationHeader.substring("Bearer ".length());
+        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT decodedJWT = verifier.verify(token);
+        String email = decodedJWT.getSubject();
         User user = userService.findByEmail(email);
+        user.setPassword(null);
         return ResponseEntity.ok().body(user);
-//        String authorizationHeader = request.getHeader(AUTHORIZATION);
-//        String token = authorizationHeader.substring("Bearer ".length());
-//        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-//        JWTVerifier verifier = JWT.require(algorithm).build();
-//        DecodedJWT decodedJWT = verifier.verify(token);
-//        String email = decodedJWT.getSubject();
-//        log.info("email " + email);
-//        User user = userService.findByEmail(email);
-//        return ResponseEntity.ok().body(user);
     }
 }
