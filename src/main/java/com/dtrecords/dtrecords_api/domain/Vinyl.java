@@ -28,8 +28,7 @@ public class Vinyl {
     private Collection<Genre> genres = new ArrayList<>();
     @ManyToOne
     private Nation nation;
-    private Boolean onSale;
-    private Float salePrice;
+    private Integer discount;
     private Float realPrice;
 
     @OneToMany

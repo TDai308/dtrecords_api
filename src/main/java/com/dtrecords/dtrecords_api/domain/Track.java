@@ -17,8 +17,5 @@ public class Track {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String trackName;
-    @ManyToMany
-    private Collection<Artist> artists = new ArrayList<>();
-    @ManyToOne
-    private Vinyl vinyl;
+    private String artists;
 }
