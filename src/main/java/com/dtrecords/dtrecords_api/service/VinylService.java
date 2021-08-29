@@ -1,12 +1,13 @@
 package com.dtrecords.dtrecords_api.service;
 
-import com.dtrecords.dtrecords_api.domain.Genre;
 import com.dtrecords.dtrecords_api.domain.Vinyl;
 
-public interface VinylService{
+import java.util.Optional;
+
+public interface VinylService extends GeneralService<Vinyl>{
     Iterable<Vinyl> findAll();
 
-    Vinyl findById(Long id);
+    Optional<Vinyl> findById(Long id);
 
     void save(Vinyl vinyl);
 

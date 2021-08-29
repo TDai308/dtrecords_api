@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +23,8 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public Artist findById(Long id) {
-        return artistRepository.getById(id);
+    public Optional<Artist> findById(Long id) {
+        return artistRepository.findById(id);
     }
 
     @Override

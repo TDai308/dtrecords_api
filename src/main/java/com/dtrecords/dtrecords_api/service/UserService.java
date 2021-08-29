@@ -3,12 +3,15 @@ package com.dtrecords.dtrecords_api.service;
 import com.dtrecords.dtrecords_api.domain.Genre;
 import com.dtrecords.dtrecords_api.domain.User;
 
-public interface UserService{
-    Iterable<User> findAll();
+import java.util.List;
+import java.util.Optional;
 
-    User findById(Long id);
+public interface UserService extends GeneralService<User>{
+    List<User> findAll();
 
-    void addRoleToUser(Long idUser, Long idRole);
+    Optional<User> findById(Long id);
+
+    void addRoleToUser(String userEmail, String roleName);
 
     User findByEmail(String email);
 

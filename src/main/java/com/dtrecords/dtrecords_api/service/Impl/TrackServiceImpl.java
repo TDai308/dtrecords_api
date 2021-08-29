@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +25,8 @@ public class TrackServiceImpl implements TrackService {
     }
 
     @Override
-    public Track findById(Long id) {
-        return trackRepository.getById(id);
+    public Optional<Track> findById(Long id) {
+        return trackRepository.findById(id);
     }
 
     @Override

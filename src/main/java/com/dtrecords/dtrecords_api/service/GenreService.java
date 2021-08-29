@@ -3,10 +3,12 @@ package com.dtrecords.dtrecords_api.service;
 import com.dtrecords.dtrecords_api.domain.Artist;
 import com.dtrecords.dtrecords_api.domain.Genre;
 
-public interface GenreService{
+import java.util.Optional;
+
+public interface GenreService extends GeneralService<Genre>{
     Iterable<Genre> findAll();
 
-    Genre findById(Long id);
+    Optional<Genre> findById(Long id);
 
     void save(Genre genre);
 

@@ -35,11 +35,6 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 public class HomeController {
     private final UserService userService;
 
-    @GetMapping("/users")
-    public ResponseEntity<Iterable<User>> getUsers() {
-        return ResponseEntity.ok().body(userService.findAll());
-    }
-
     @GetMapping("/user")
     public ResponseEntity<User> getUser(HttpServletRequest request) {
         String authorizationHeader = request.getHeader(AUTHORIZATION);

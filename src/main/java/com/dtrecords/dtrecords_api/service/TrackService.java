@@ -3,10 +3,12 @@ package com.dtrecords.dtrecords_api.service;
 import com.dtrecords.dtrecords_api.domain.Genre;
 import com.dtrecords.dtrecords_api.domain.Track;
 
-public interface TrackService {
+import java.util.Optional;
+
+public interface TrackService extends GeneralService<Track>{
     Iterable<Track> findAll();
 
-    Track findById(Long id);
+    Optional<Track> findById(Long id);
 
     void save(Track track);
 

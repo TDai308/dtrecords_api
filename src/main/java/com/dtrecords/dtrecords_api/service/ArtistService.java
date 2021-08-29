@@ -2,10 +2,12 @@ package com.dtrecords.dtrecords_api.service;
 
 import com.dtrecords.dtrecords_api.domain.Artist;
 
-public interface ArtistService{
+import java.util.Optional;
+
+public interface ArtistService extends GeneralService<Artist>{
     Iterable<Artist> findAll();
 
-    Artist findById(Long id);
+    Optional<Artist> findById(Long id);
 
     void save(Artist artist);
 

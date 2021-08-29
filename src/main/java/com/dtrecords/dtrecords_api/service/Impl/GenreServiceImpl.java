@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +23,8 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre findById(Long id) {
-        return genreRepository.getById(id);
+    public Optional<Genre> findById(Long id) {
+        return genreRepository.findById(id);
     }
 
     @Override

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +23,8 @@ public class VinylServiceImpl implements VinylService {
     }
 
     @Override
-    public Vinyl findById(Long id) {
-        return vinylRepository.getById(id);
+    public Optional<Vinyl> findById(Long id) {
+        return vinylRepository.findById(id);
     }
 
     @Override
