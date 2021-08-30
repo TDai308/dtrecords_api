@@ -35,7 +35,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 public class HomeController {
     private final UserService userService;
 
-    @GetMapping("/user")
+    @GetMapping("/token/user")
     public ResponseEntity<User> getUser(HttpServletRequest request) {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         String token = authorizationHeader.substring("Bearer ".length());
