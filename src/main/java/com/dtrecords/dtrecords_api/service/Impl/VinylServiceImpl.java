@@ -29,6 +29,7 @@ public class VinylServiceImpl implements VinylService {
 
     @Override
     public void save(Vinyl vinyl) {
+        vinyl.setRealPrice(Math.round((vinyl.getPrice() - (vinyl.getPrice() * vinyl.getDiscount()) / 100) * 100.0) / 100.0);
         vinylRepository.save(vinyl);
     }
 

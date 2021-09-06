@@ -18,7 +18,7 @@ public class NationServiceImpl implements NationService {
     private final NationRepository nationRepository;
 
     @Override
-    public List<Nation> findAll() {
+    public Iterable<Nation> findAll() {
         return nationRepository.findAll();
     }
 

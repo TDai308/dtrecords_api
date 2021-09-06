@@ -20,17 +20,17 @@ public class Vinyl {
 
     @ManyToOne
     private Artist artist;
-    private String img1;
-    private String img2;
+    private String thumbnail1;
+    private String thumbnail2;
     private Long quantity;
-    private Float price;
+    private Double price;
     @ManyToMany
     private Collection<Genre> genres = new ArrayList<>();
     @ManyToOne
     private Nation nation;
-    private Integer discount;
-    private Float realPrice;
+    private Long discount;
+    private Double realPrice;
 
-    @OneToMany
-    private Collection<Track> tracks = new ArrayList<>();
+//    @OneToMany
+//    private Collection<Track> tracks = new ArrayList<>();
 }

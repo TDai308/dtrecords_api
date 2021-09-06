@@ -18,4 +18,7 @@ public class Track {
     private Long id;
     private String trackName;
     private String artists;
+    @ManyToOne
+    @JoinColumn(name = "vinyl_id")
+    private Vinyl vinyl;
 }
