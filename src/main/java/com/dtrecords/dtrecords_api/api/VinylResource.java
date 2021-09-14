@@ -1,7 +1,9 @@
 package com.dtrecords.dtrecords_api.api;
 
+import com.dtrecords.dtrecords_api.domain.Genre;
 import com.dtrecords.dtrecords_api.domain.User;
 import com.dtrecords.dtrecords_api.domain.Vinyl;
+import com.dtrecords.dtrecords_api.service.GenreService;
 import com.dtrecords.dtrecords_api.service.VinylService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class VinylResource {
     private final VinylService vinylService;
+    private final GenreService genreService;
 
     @GetMapping("/vinyls")
     public ResponseEntity<Iterable<Vinyl>> getVinyls() {
@@ -59,7 +62,6 @@ public class VinylResource {
         currentVinyl.get().setGenres(vinyl.getGenres());
         currentVinyl.get().setNation(vinyl.getNation());
         currentVinyl.get().setDiscount(vinyl.getDiscount());
-        currentVinyl.get().setRealPrice(vinyl.getRealPrice());
 
         vinylService.save(currentVinyl.get());
         return new ResponseEntity<Vinyl>(currentVinyl.get(), HttpStatus.OK);
@@ -74,5 +76,10 @@ public class VinylResource {
         }
         vinylService.remove(id);
         return new ResponseEntity<Vinyl>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/genres")
+    public ResponseEntity<Iterable<Genre>> getGenreList() {
+        return new ResponseEntity<Iterable<Genre>>(genreService.findAll(), HttpStatus.OK);
     }
 }
