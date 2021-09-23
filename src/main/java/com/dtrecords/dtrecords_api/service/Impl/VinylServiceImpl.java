@@ -5,6 +5,8 @@ import com.dtrecords.dtrecords_api.repository.VinylRepository;
 import com.dtrecords.dtrecords_api.service.VinylService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,6 +18,11 @@ import java.util.Optional;
 @Slf4j
 public class VinylServiceImpl implements VinylService {
     private final VinylRepository vinylRepository;
+
+    @Override
+    public Page<Vinyl> findAll(Pageable pageable) {
+        return vinylRepository.findAll(pageable);
+    }
 
     @Override
     public Iterable<Vinyl> findAll() {

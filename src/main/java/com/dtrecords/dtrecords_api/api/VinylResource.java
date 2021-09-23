@@ -1,11 +1,14 @@
 package com.dtrecords.dtrecords_api.api;
 
 import com.dtrecords.dtrecords_api.domain.Genre;
-import com.dtrecords.dtrecords_api.domain.User;
 import com.dtrecords.dtrecords_api.domain.Vinyl;
 import com.dtrecords.dtrecords_api.service.GenreService;
 import com.dtrecords.dtrecords_api.service.VinylService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +26,17 @@ public class VinylResource {
     private final GenreService genreService;
 
     @GetMapping("/vinyls")
-    public ResponseEntity<Iterable<Vinyl>> getVinyls() {
-        Iterable<Vinyl> vinyls = vinylService.findAll();
-        return new ResponseEntity<Iterable<Vinyl>>(vinyls, HttpStatus.OK);
+    public ResponseEntity<Page<Vinyl>> getVinyls(Pageable pageable,@RequestParam(required = false) int page, @RequestParam(required = false) int size, @RequestParam(required = false) String sort, @RequestParam(required = false) String direction) {
+        Page<Vinyl> vinyls;
+        if (direction != null && sort !=null) {
+            vinyls = vinylService.findAll(PageRequest.of(
+                    page, size,
+                    direction.equalsIgnoreCase("asc") ? Sort.by(sort).ascending() : Sort.by(sort).descending()
+            ));
+        } else {
+            vinyls = vinylService.findAll(pageable);
+        }
+        return new ResponseEntity<Page<Vinyl>>(vinyls, HttpStatus.OK);
     }
 
     @GetMapping("/vinyl/{id}")
