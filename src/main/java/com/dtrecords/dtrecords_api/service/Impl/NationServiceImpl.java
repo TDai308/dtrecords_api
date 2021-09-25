@@ -23,6 +23,11 @@ public class NationServiceImpl implements NationService {
     }
 
     @Override
+    public Nation findByNation(String nation) {
+        return nationRepository.findByNation(nation);
+    }
+
+    @Override
     public void save(Nation nation) {
         nationRepository.save(nation);
     }

@@ -3,6 +3,7 @@ package com.dtrecords.dtrecords_api.api;
 import com.dtrecords.dtrecords_api.domain.Genre;
 import com.dtrecords.dtrecords_api.domain.Vinyl;
 import com.dtrecords.dtrecords_api.service.GenreService;
+import com.dtrecords.dtrecords_api.service.NationService;
 import com.dtrecords.dtrecords_api.service.VinylService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,17 +25,78 @@ import java.util.Optional;
 public class VinylResource {
     private final VinylService vinylService;
     private final GenreService genreService;
+    private final NationService nationService;
+
+    private Pageable checkTheSort(Pageable pageable, int page, int size, String sort, String direction) {
+        if (direction != null && sort != null) {
+            pageable = PageRequest.of(
+                    page, size,
+                    direction.equalsIgnoreCase("asc") ? Sort.by(sort).ascending() : Sort.by(sort).descending()
+            );
+        }
+        return pageable;
+    }
 
     @GetMapping("/vinyls")
     public ResponseEntity<Page<Vinyl>> getVinyls(Pageable pageable,@RequestParam(required = false) int page, @RequestParam(required = false) int size, @RequestParam(required = false) String sort, @RequestParam(required = false) String direction) {
-        Page<Vinyl> vinyls;
-        if (direction != null && sort !=null) {
-            vinyls = vinylService.findAll(PageRequest.of(
-                    page, size,
-                    direction.equalsIgnoreCase("asc") ? Sort.by(sort).ascending() : Sort.by(sort).descending()
-            ));
-        } else {
-            vinyls = vinylService.findAll(pageable);
+        pageable = checkTheSort(pageable,page,size,sort,direction);
+        Page<Vinyl> vinyls = vinylService.findAll(pageable);
+        return new ResponseEntity<Page<Vinyl>>(vinyls, HttpStatus.OK);
+    }
+
+    @GetMapping("/vinyls/{productsOption}")
+    public ResponseEntity<Page<Vinyl>> getVinylsOption(Pageable pageable,@RequestParam(required = false) int page, @RequestParam(required = false) int size, @RequestParam(required = false) String sort, @RequestParam(required = false) String direction, @PathVariable(name = "productsOption") String productsOption) {
+        pageable = checkTheSort(pageable,page,size,sort,direction);
+        Page<Vinyl> vinyls = null;
+        switch (productsOption) {
+            case "saleProducts":
+                vinyls = vinylService.findAllByDiscountGreaterThan(0L, pageable);
+                break;
+            case "under10Dollars":
+                vinyls = vinylService.findAllByRealPriceLessThanEqual(10D, pageable);
+                break;
+            case "under20Dollars":
+                vinyls = vinylService.findAllByRealPriceLessThanEqual(20D, pageable);
+                break;
+            case "under30Dollars":
+                vinyls = vinylService.findAllByRealPriceLessThanEqual(30D, pageable);
+                break;
+            case "over30Dollars":
+                vinyls = vinylService.findAllByRealPriceGreaterThanEqual(30D, pageable);
+                break;
+            case "VietnamVinyls":
+                vinyls = vinylService.findAllByNation(nationService.findByNation("Việt Nam"), pageable);
+                break;
+            case "UsUkVinyls":
+                vinyls = vinylService.findAllByNation(nationService.findByNation("Mỹ"), pageable);
+                break;
+            case "KoreanVinyls":
+                vinyls = vinylService.findAllByNation(nationService.findByNation("Hàn Quốc"), pageable);
+                break;
+            case "popVinyl":
+                vinyls = vinylService.findAllByGenre(genreService.findByGenreName("Pop"), pageable, sort, direction);
+                break;
+            case "rockVinyl":
+                vinyls = vinylService.findAllByGenre(genreService.findByGenreName("Rock"), pageable, sort, direction);
+                break;
+            case "r&bVinyl":
+                vinyls = vinylService.findAllByGenre(genreService.findByGenreName("R&B"), pageable, sort, direction);
+                break;
+            case "hiphopVinyl":
+                vinyls = vinylService.findAllByGenre(genreService.findByGenreName("HipHop"), pageable, sort, direction);
+                break;
+            case "countryVinyl":
+                vinyls = vinylService.findAllByGenre(genreService.findByGenreName("Country"), pageable, sort, direction);
+                break;
+            case "edmVinyl":
+                vinyls = vinylService.findAllByGenre(genreService.findByGenreName("EDM"), pageable, sort, direction);
+                break;
+            case "indieVinyl":
+                vinyls = vinylService.findAllByGenre(genreService.findByGenreName("Indie"), pageable, sort, direction);
+                break;
+            case "jazzVinyl":
+                vinyls = vinylService.findAllByGenre(genreService.findByGenreName("Jazz"), pageable, sort, direction);
+                break;
         }
         return new ResponseEntity<Page<Vinyl>>(vinyls, HttpStatus.OK);
     }

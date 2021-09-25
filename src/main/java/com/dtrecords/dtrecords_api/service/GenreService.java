@@ -10,6 +10,8 @@ public interface GenreService extends GeneralService<Genre>{
 
     Optional<Genre> findById(Long id);
 
+    Genre findByGenreName (String genreName);
+
     void save(Genre genre);
 
     void remove(Long id);
