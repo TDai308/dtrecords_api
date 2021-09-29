@@ -30,7 +30,4 @@ public class Vinyl {
     private Nation nation;
     private Long discount;
     private Double realPrice;
-
-//    @OneToMany
-//    private Collection<Track> tracks = new ArrayList<>();
 }

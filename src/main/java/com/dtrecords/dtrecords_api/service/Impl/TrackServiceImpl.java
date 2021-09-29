@@ -2,6 +2,7 @@ package com.dtrecords.dtrecords_api.service.Impl;
 
 import com.dtrecords.dtrecords_api.domain.Artist;
 import com.dtrecords.dtrecords_api.domain.Track;
+import com.dtrecords.dtrecords_api.domain.Vinyl;
 import com.dtrecords.dtrecords_api.repository.ArtistRepository;
 import com.dtrecords.dtrecords_api.repository.TrackRepository;
 import com.dtrecords.dtrecords_api.service.TrackService;
@@ -22,6 +23,11 @@ public class TrackServiceImpl implements TrackService {
     @Override
     public Iterable<Track> findAll() {
         return trackRepository.findAll();
+    }
+
+    @Override
+    public Iterable<Track> findAllByVinyl(Vinyl vinyl) {
+        return trackRepository.findAllByVinyl(vinyl);
     }
 
     @Override
