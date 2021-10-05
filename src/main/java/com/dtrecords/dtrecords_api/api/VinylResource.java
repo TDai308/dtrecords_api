@@ -5,6 +5,7 @@ import com.dtrecords.dtrecords_api.domain.Vinyl;
 import com.dtrecords.dtrecords_api.service.GenreService;
 import com.dtrecords.dtrecords_api.service.NationService;
 import com.dtrecords.dtrecords_api.service.VinylService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,10 +13,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -26,6 +35,10 @@ public class VinylResource {
     private final VinylService vinylService;
     private final GenreService genreService;
     private final NationService nationService;
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    private static final Path CURRENT_FOLDER = Paths.get(System.getProperty("user.dir"));
 
     private Pageable checkTheSort(Pageable pageable, int page, int size, String sort, String direction) {
         if (direction != null && sort != null) {
@@ -111,8 +124,27 @@ public class VinylResource {
         return new ResponseEntity<Vinyl>(vinyl.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/admin/vinyl")
-    public ResponseEntity<Void> createVinyl(@RequestBody Vinyl vinyl, UriComponentsBuilder ucBuilder) {
+    @PostMapping(value = "/admin/vinyl", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> createVinyl(@RequestParam("vinyl") String vinylJson, @RequestParam("thumbnail1") MultipartFile thumbnail1 , @RequestParam("thumbnail2") MultipartFile thumbnail2, @RequestParam UriComponentsBuilder ucBuilder) throws IOException {
+        Vinyl vinyl = objectMapper.readValue(vinylJson, Vinyl.class);
+        Path staticPath = Paths.get("static");
+        Path imagePath = Paths.get("images");
+        Path vinylsImagePath = Paths.get("vinylsImage");
+        Path vinylImagePath = Paths.get(vinyl.getVinylName() + " - " + vinyl.getArtist().getNameArtist());
+        if (!Files.exists(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath))) {
+            Files.createDirectories(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath));
+        }
+        Path thumbnail1Image = CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail1.getOriginalFilename()));
+        Path thumbnail2Image = CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail2.getOriginalFilename()));
+
+        try (OutputStream os = Files.newOutputStream(thumbnail1Image)) {
+            os.write(thumbnail1.getBytes());
+        }
+        try (OutputStream os = Files.newOutputStream(thumbnail2Image)) {
+            os.write(thumbnail2.getBytes());
+        }
+        vinyl.setThumbnail1((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail1.getOriginalFilename()))).toString());
+        vinyl.setThumbnail2((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail1.getOriginalFilename()))).toString());
         vinylService.save(vinyl);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/api/vinyl/{id}").buildAndExpand(vinyl.getId()).toUri());
