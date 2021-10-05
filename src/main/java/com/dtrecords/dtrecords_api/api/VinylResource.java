@@ -116,6 +116,8 @@ public class VinylResource {
 
     @GetMapping("/vinyl/{id}")
     public ResponseEntity<Vinyl> getVinyl(@PathVariable Long id) {
+        System.out.println("CURRENT_FOLDER");
+        System.out.println(CURRENT_FOLDER);
         Optional<Vinyl> vinyl = vinylService.findById(id);
         if (!vinyl.isPresent()) {
             System.out.println("Vinyl with id " + id + " not found");
@@ -125,7 +127,7 @@ public class VinylResource {
     }
 
     @PostMapping(value = "/admin/vinyl", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> createVinyl(@RequestParam("vinyl") String vinylJson, @RequestParam("thumbnail1") MultipartFile thumbnail1 , @RequestParam("thumbnail2") MultipartFile thumbnail2, @RequestParam UriComponentsBuilder ucBuilder) throws IOException {
+    public ResponseEntity<Void> createVinyl(@RequestParam("vinyl") String vinylJson, @RequestParam("thumbnail1") MultipartFile thumbnail1 , @RequestParam("thumbnail2") MultipartFile thumbnail2, UriComponentsBuilder ucBuilder) throws IOException {
         Vinyl vinyl = objectMapper.readValue(vinylJson, Vinyl.class);
         Path staticPath = Paths.get("static");
         Path imagePath = Paths.get("images");
