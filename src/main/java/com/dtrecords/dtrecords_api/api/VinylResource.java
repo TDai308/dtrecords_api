@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -146,24 +147,76 @@ public class VinylResource {
             os.write(thumbnail2.getBytes());
         }
         vinyl.setThumbnail1((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail1.getOriginalFilename()))).toString());
-        vinyl.setThumbnail2((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail1.getOriginalFilename()))).toString());
+        vinyl.setThumbnail2((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail2.getOriginalFilename()))).toString());
         vinylService.save(vinyl);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/api/vinyl/{id}").buildAndExpand(vinyl.getId()).toUri());
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 
-    @PutMapping("/admin/vinyl/{id}")
-    public ResponseEntity<Vinyl> updateVinyl(@PathVariable Long id, @RequestBody Vinyl vinyl) {
+    @PutMapping(value = "/admin/vinyl/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Vinyl> updateVinyl(@PathVariable Long id, @RequestParam("vinyl") String vinylJson,@RequestParam(name = "thumbnail1",required = false) MultipartFile thumbnail1 , @RequestParam(name = "thumbnail2",required = false) MultipartFile thumbnail2) throws IOException {
+        Vinyl vinyl = objectMapper.readValue(vinylJson, Vinyl.class);
         Optional<Vinyl> currentVinyl = vinylService.findById(id);
         if (!currentVinyl.isPresent()) {
             System.out.println("Vinyl with id " + id + " not found");
             return new ResponseEntity<Vinyl>(HttpStatus.NOT_FOUND);
         }
+
+        Path staticPath = Paths.get("static");
+        Path imagePath = Paths.get("images");
+        Path vinylsImagePath = Paths.get("vinylsImage");
+        Path vinylImagePath = Paths.get(vinyl.getVinylName() + " - " + vinyl.getArtist().getNameArtist());
+
+        if (!vinyl.getVinylName().equals(currentVinyl.get().getVinylName()) || !vinyl.getArtist().getNameArtist().equals(currentVinyl.get().getArtist().getNameArtist())) {
+            if (!Files.exists(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath))) {
+                Files.createDirectories(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath));
+            }
+            if (thumbnail1 != null) {
+                Path thumbnail1Image = CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail1.getOriginalFilename()));
+                try (OutputStream os = Files.newOutputStream(thumbnail1Image)) {
+                    os.write(thumbnail1.getBytes());
+                }
+                currentVinyl.get().setThumbnail1((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail1.getOriginalFilename()))).toString());
+            } else {
+                File file = new File(CURRENT_FOLDER + currentVinyl.get().getThumbnail1());
+                Files.move(Paths.get(CURRENT_FOLDER + currentVinyl.get().getThumbnail1()),
+                CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath).resolve(file.getName()));
+            }
+            if (thumbnail2 != null) {
+                Path thumbnail2Image = CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail2.getOriginalFilename()));
+                try (OutputStream os = Files.newOutputStream(thumbnail2Image)) {
+                    os.write(thumbnail2.getBytes());
+                }
+                currentVinyl.get().setThumbnail1((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail2.getOriginalFilename()))).toString());
+            } else {
+                File file = new File(CURRENT_FOLDER + currentVinyl.get().getThumbnail2());
+                Files.move(Paths.get(CURRENT_FOLDER + currentVinyl.get().getThumbnail2()),
+                        CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath).resolve(file.getName()));
+            }
+        } else {
+            if (thumbnail1 != null) {
+                Path thumbnail1Image = CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail1.getOriginalFilename()));
+                try (OutputStream os = Files.newOutputStream(thumbnail1Image)) {
+                    os.write(thumbnail1.getBytes());
+                }
+                System.out.println("hahahah");
+                System.out.println(Paths.get(CURRENT_FOLDER  + "\\" + currentVinyl.get().getThumbnail1()));
+                Files.deleteIfExists(Paths.get(CURRENT_FOLDER + "\\" + currentVinyl.get().getThumbnail1()));
+                currentVinyl.get().setThumbnail1((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail1.getOriginalFilename()))).toString());
+            }
+            if (thumbnail2 != null) {
+                Path thumbnail2Image = CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail2.getOriginalFilename()));
+                try (OutputStream os = Files.newOutputStream(thumbnail2Image)) {
+                    os.write(thumbnail2.getBytes());
+                }
+                currentVinyl.get().setThumbnail2((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail2.getOriginalFilename()))).toString());
+                Files.deleteIfExists(Paths.get(CURRENT_FOLDER + currentVinyl.get().getThumbnail2()));
+            }
+        }
+
         currentVinyl.get().setVinylName(vinyl.getVinylName());
         currentVinyl.get().setArtist(vinyl.getArtist());
-        currentVinyl.get().setThumbnail1(vinyl.getThumbnail1());
-        currentVinyl.get().setThumbnail2(vinyl.getThumbnail2());
         currentVinyl.get().setQuantity(vinyl.getQuantity());
         currentVinyl.get().setPrice(vinyl.getPrice());
         currentVinyl.get().setGenres(vinyl.getGenres());
