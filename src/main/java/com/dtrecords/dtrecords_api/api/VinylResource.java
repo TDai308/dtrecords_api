@@ -117,8 +117,6 @@ public class VinylResource {
 
     @GetMapping("/vinyl/{id}")
     public ResponseEntity<Vinyl> getVinyl(@PathVariable Long id) {
-        System.out.println("CURRENT_FOLDER");
-        System.out.println(CURRENT_FOLDER);
         Optional<Vinyl> vinyl = vinylService.findById(id);
         if (!vinyl.isPresent()) {
             System.out.println("Vinyl with id " + id + " not found");
@@ -167,6 +165,7 @@ public class VinylResource {
         Path imagePath = Paths.get("images");
         Path vinylsImagePath = Paths.get("vinylsImage");
         Path vinylImagePath = Paths.get(vinyl.getVinylName() + " - " + vinyl.getArtist().getNameArtist());
+        Path currentVinylImagePath = Paths.get(currentVinyl.get().getVinylName() + " - " + currentVinyl.get().getArtist().getNameArtist());
 
         if (!vinyl.getVinylName().equals(currentVinyl.get().getVinylName()) || !vinyl.getArtist().getNameArtist().equals(currentVinyl.get().getArtist().getNameArtist())) {
             if (!Files.exists(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath))) {
@@ -177,32 +176,35 @@ public class VinylResource {
                 try (OutputStream os = Files.newOutputStream(thumbnail1Image)) {
                     os.write(thumbnail1.getBytes());
                 }
+                Files.deleteIfExists(Paths.get(CURRENT_FOLDER + "\\" + staticPath.toString() + "\\" + currentVinyl.get().getThumbnail1()));
                 currentVinyl.get().setThumbnail1((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail1.getOriginalFilename()))).toString());
             } else {
-                File file = new File(CURRENT_FOLDER + currentVinyl.get().getThumbnail1());
-                Files.move(Paths.get(CURRENT_FOLDER + currentVinyl.get().getThumbnail1()),
-                CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath).resolve(file.getName()));
+                File file = new File(CURRENT_FOLDER + "\\" + staticPath.toString() + "\\" + currentVinyl.get().getThumbnail1());
+                Files.move(Paths.get(CURRENT_FOLDER + "\\" + staticPath.toString() + "\\" + currentVinyl.get().getThumbnail1()),
+                        CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath).resolve(file.getName()));
+                currentVinyl.get().setThumbnail1((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(file.getName())).toString());
             }
             if (thumbnail2 != null) {
                 Path thumbnail2Image = CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail2.getOriginalFilename()));
                 try (OutputStream os = Files.newOutputStream(thumbnail2Image)) {
                     os.write(thumbnail2.getBytes());
                 }
+                Files.deleteIfExists(Paths.get(CURRENT_FOLDER + "\\" + staticPath.toString() + "\\" + currentVinyl.get().getThumbnail2()));
                 currentVinyl.get().setThumbnail1((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail2.getOriginalFilename()))).toString());
             } else {
-                File file = new File(CURRENT_FOLDER + currentVinyl.get().getThumbnail2());
-                Files.move(Paths.get(CURRENT_FOLDER + currentVinyl.get().getThumbnail2()),
+                File file = new File(CURRENT_FOLDER + "\\" + staticPath.toString() + "\\" + currentVinyl.get().getThumbnail2());
+                Files.move(Paths.get(CURRENT_FOLDER + "\\" + staticPath.toString() + "\\" + currentVinyl.get().getThumbnail2()),
                         CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath).resolve(file.getName()));
+                currentVinyl.get().setThumbnail2((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(file.getName())).toString());
             }
+            Files.delete(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(currentVinylImagePath));
         } else {
             if (thumbnail1 != null) {
                 Path thumbnail1Image = CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail1.getOriginalFilename()));
                 try (OutputStream os = Files.newOutputStream(thumbnail1Image)) {
                     os.write(thumbnail1.getBytes());
                 }
-                System.out.println("hahahah");
-                System.out.println(Paths.get(CURRENT_FOLDER  + "\\" + currentVinyl.get().getThumbnail1()));
-                Files.deleteIfExists(Paths.get(CURRENT_FOLDER + "\\" + currentVinyl.get().getThumbnail1()));
+                Files.deleteIfExists(Paths.get(CURRENT_FOLDER + "\\" + staticPath.toString() + "\\" + currentVinyl.get().getThumbnail1()));
                 currentVinyl.get().setThumbnail1((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail1.getOriginalFilename()))).toString());
             }
             if (thumbnail2 != null) {
@@ -210,8 +212,8 @@ public class VinylResource {
                 try (OutputStream os = Files.newOutputStream(thumbnail2Image)) {
                     os.write(thumbnail2.getBytes());
                 }
+                Files.deleteIfExists(Paths.get(CURRENT_FOLDER + "\\" + staticPath.toString() + "\\" + currentVinyl.get().getThumbnail2()));
                 currentVinyl.get().setThumbnail2((imagePath.resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail2.getOriginalFilename()))).toString());
-                Files.deleteIfExists(Paths.get(CURRENT_FOLDER + currentVinyl.get().getThumbnail2()));
             }
         }
 
