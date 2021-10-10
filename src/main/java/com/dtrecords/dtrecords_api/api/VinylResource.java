@@ -41,6 +41,10 @@ public class VinylResource {
 
     private static final Path CURRENT_FOLDER = Paths.get(System.getProperty("user.dir"));
 
+    Path staticPath = Paths.get("static");
+    Path imagePath = Paths.get("images");
+    Path vinylsImagePath = Paths.get("vinylsImage");
+
     private Pageable checkTheSort(Pageable pageable, int page, int size, String sort, String direction) {
         if (direction != null && sort != null) {
             pageable = PageRequest.of(
@@ -161,12 +165,10 @@ public class VinylResource {
             return new ResponseEntity<Vinyl>(HttpStatus.NOT_FOUND);
         }
 
-        Path staticPath = Paths.get("static");
-        Path imagePath = Paths.get("images");
-        Path vinylsImagePath = Paths.get("vinylsImage");
         Path vinylImagePath = Paths.get(vinyl.getVinylName() + " - " + vinyl.getArtist().getNameArtist());
         Path currentVinylImagePath = Paths.get(currentVinyl.get().getVinylName() + " - " + currentVinyl.get().getArtist().getNameArtist());
 
+        System.out.println(0);
         if (!vinyl.getVinylName().equals(currentVinyl.get().getVinylName()) || !vinyl.getArtist().getNameArtist().equals(currentVinyl.get().getArtist().getNameArtist())) {
             if (!Files.exists(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath))) {
                 Files.createDirectories(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath));
@@ -199,6 +201,9 @@ public class VinylResource {
             }
             Files.delete(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(currentVinylImagePath));
         } else {
+            if (!Files.exists(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath))) {
+                Files.createDirectories(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath));
+            }
             if (thumbnail1 != null) {
                 Path thumbnail1Image = CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath).resolve(Objects.requireNonNull(thumbnail1.getOriginalFilename()));
                 try (OutputStream os = Files.newOutputStream(thumbnail1Image)) {
@@ -230,13 +235,17 @@ public class VinylResource {
     }
 
     @DeleteMapping("/admin/vinyl/{id}")
-    public ResponseEntity<Vinyl> deleteVinyl(@PathVariable Long id) {
+    public ResponseEntity<Vinyl> deleteVinyl(@PathVariable Long id) throws IOException {
         Optional<Vinyl> vinyl = vinylService.findById(id);
         if (!vinyl.isPresent()) {
             System.out.println("Vinyl with id " + id + " not found");
             return new ResponseEntity<Vinyl>(HttpStatus.NOT_FOUND);
         }
         vinylService.remove(id);
+        Path VinylImagePath = Paths.get(vinyl.get().getVinylName() + " - " + vinyl.get().getArtist().getNameArtist());
+        Files.deleteIfExists(Paths.get(CURRENT_FOLDER + "\\" + "static" + "\\" + vinyl.get().getThumbnail1()));
+        Files.deleteIfExists(Paths.get(CURRENT_FOLDER + "\\" + "static" + "\\" + vinyl.get().getThumbnail2()));
+        Files.delete(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(VinylImagePath));
         return new ResponseEntity<Vinyl>(HttpStatus.NO_CONTENT);
     }
 

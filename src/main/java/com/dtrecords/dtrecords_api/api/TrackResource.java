@@ -23,5 +23,6 @@ public class TrackResource {
             trackList = trackService.findAll();
         } else trackList = trackService.findAllByVinyl(vinylService.findById(Long.parseLong(idVinyl)).orElse(null));
         return new ResponseEntity<Iterable<Track>>(trackList, HttpStatus.OK);
-    };
+    }
+
 }
