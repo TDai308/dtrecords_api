@@ -81,6 +81,11 @@ public class VinylServiceImpl implements VinylService {
     }
 
     @Override
+    public Iterable<Vinyl> findAllWithList() {
+        return vinylRepository.findAll();
+    }
+
+    @Override
     public Iterable<Vinyl> findAll() {
         return vinylRepository.findAll();
     }

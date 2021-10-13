@@ -21,6 +21,8 @@ public interface VinylService extends GeneralService<Vinyl>{
 
     Page<Vinyl> findAllByGenre(Genre genre, Pageable pageable, String sort, String direction);
 
+    Iterable<Vinyl> findAllWithList();
+
     Optional<Vinyl> findById(Long id);
 
     void save(Vinyl vinyl);

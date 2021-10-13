@@ -62,6 +62,11 @@ public class VinylResource {
         return new ResponseEntity<Page<Vinyl>>(vinyls, HttpStatus.OK);
     }
 
+    @GetMapping("/vinylList")
+    public ResponseEntity<Iterable<Vinyl>> getVinylList() {
+        return new ResponseEntity<Iterable<Vinyl>>(vinylService.findAll(), HttpStatus.OK);
+    }
+
     @GetMapping("/vinyls/{productsOption}")
     public ResponseEntity<Page<Vinyl>> getVinylsOption(Pageable pageable,@RequestParam(required = false) int page, @RequestParam(required = false) int size, @RequestParam(required = false) String sort, @RequestParam(required = false) String direction, @PathVariable(name = "productsOption") String productsOption) {
         pageable = checkTheSort(pageable,page,size,sort,direction);
