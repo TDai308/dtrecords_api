@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
 
 @Entity
 @Data
@@ -18,6 +16,7 @@ public class Track {
     private Long id;
     private String trackName;
     private String artists;
+    private String trackPreview;
     @ManyToOne
     @JoinColumn(name = "vinyl_id")
     private Vinyl vinyl;
