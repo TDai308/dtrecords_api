@@ -137,9 +137,6 @@ public class VinylResource {
     @PostMapping(value = "/admin/vinyl", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> createVinyl(@RequestParam("vinyl") String vinylJson, @RequestParam("thumbnail1") MultipartFile thumbnail1 , @RequestParam("thumbnail2") MultipartFile thumbnail2, UriComponentsBuilder ucBuilder) throws IOException {
         Vinyl vinyl = objectMapper.readValue(vinylJson, Vinyl.class);
-        Path staticPath = Paths.get("static");
-        Path imagePath = Paths.get("images");
-        Path vinylsImagePath = Paths.get("vinylsImage");
         Path vinylImagePath = Paths.get(vinyl.getVinylName() + " - " + vinyl.getArtist().getNameArtist());
         if (!Files.exists(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath))) {
             Files.createDirectories(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath));
@@ -173,7 +170,6 @@ public class VinylResource {
         Path vinylImagePath = Paths.get(vinyl.getVinylName() + " - " + vinyl.getArtist().getNameArtist());
         Path currentVinylImagePath = Paths.get(currentVinyl.get().getVinylName() + " - " + currentVinyl.get().getArtist().getNameArtist());
 
-        System.out.println(0);
         if (!vinyl.getVinylName().equals(currentVinyl.get().getVinylName()) || !vinyl.getArtist().getNameArtist().equals(currentVinyl.get().getArtist().getNameArtist())) {
             if (!Files.exists(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath))) {
                 Files.createDirectories(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(vinylsImagePath).resolve(vinylImagePath));
