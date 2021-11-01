@@ -1,10 +1,8 @@
 package com.dtrecords.dtrecords_api.api;
 
 import com.dtrecords.dtrecords_api.domain.Track;
-import com.dtrecords.dtrecords_api.domain.Vinyl;
 import com.dtrecords.dtrecords_api.service.TrackService;
 import com.dtrecords.dtrecords_api.service.VinylService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
