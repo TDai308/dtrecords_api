@@ -2,6 +2,7 @@ package com.dtrecords.dtrecords_api.api;
 
 import com.dtrecords.dtrecords_api.domain.Cart;
 import com.dtrecords.dtrecords_api.domain.Order;
+import com.dtrecords.dtrecords_api.domain.Vinyl;
 import com.dtrecords.dtrecords_api.service.OrderService;
 import com.dtrecords.dtrecords_api.service.VinylService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.Entity;
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @NoArgsConstructor
@@ -40,6 +43,12 @@ public class OrderResource {
     private final VinylService vinylService;
     private final OrderService orderService;
     ObjectMapper objectMapper = new ObjectMapper();
+
+    @GetMapping("/admin/orders")
+    public ResponseEntity<Iterable<Order>> getOrderList() {
+        Iterable<Order> orders = orderService.findAll();
+        return new ResponseEntity<Iterable<Order>>(orders, HttpStatus.OK);
+    }
 
     @PostMapping(value = "/ProceedToCheckout")
     public ResponseEntity<Void> ConfirmOrder(@RequestParam("customerInformation") String customerInformationJson, @RequestParam("cart") String cartJson, UriComponentsBuilder ucBuilder) throws JsonProcessingException {
@@ -74,5 +83,20 @@ public class OrderResource {
             orderService.save(order);
         }
         return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @PutMapping("/admin/order/{id}/updateDelivery")
+    public ResponseEntity<Order> updateTheOrder(@PathVariable("id") Long id, @RequestParam("delivery") String delivery) {
+        System.out.println("update");
+        System.out.println(delivery);
+        Optional<Order> currentOrder = orderService.findById(id);
+        if (!currentOrder.isPresent()) {
+            System.out.println("Order with id " + id + " not found");
+            return new ResponseEntity<Order>(HttpStatus.NOT_FOUND);
+        }
+
+        currentOrder.get().setDelivery(delivery);
+        orderService.save(currentOrder.get());
+        return new ResponseEntity<Order>(currentOrder.get(),HttpStatus.OK);
     }
 }
