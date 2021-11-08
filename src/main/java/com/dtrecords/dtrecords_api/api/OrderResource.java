@@ -99,4 +99,14 @@ public class OrderResource {
         orderService.save(currentOrder.get());
         return new ResponseEntity<Order>(currentOrder.get(),HttpStatus.OK);
     }
-}
+
+    @DeleteMapping("/admin/order/{id}")
+    public ResponseEntity<Order> deleteOrder(@PathVariable("id") Long id) {
+        Optional<Order> order = orderService.findById(id);
+        if (!order.isPresent()) {
+            System.out.println("Order with id " + id + " not found");
+            return new ResponseEntity<Order>(HttpStatus.NOT_FOUND);
+        }
+        orderService.remove(id);
+        return new ResponseEntity<Order>(HttpStatus.NO_CONTENT);
+    }}
