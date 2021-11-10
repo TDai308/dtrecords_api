@@ -47,6 +47,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public void deleteRoleToUser(String userEmail, String roleName) {
+        User user = userRepository.findUserByEmail(userEmail);
+        Role role = roleRepository.findRoleByRoleName(roleName);
+        user.getRoles().remove(role);
+    }
+
+    @Override
     public User findByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }

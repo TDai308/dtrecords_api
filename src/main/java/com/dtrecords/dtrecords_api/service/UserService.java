@@ -13,6 +13,8 @@ public interface UserService extends GeneralService<User>{
 
     void addRoleToUser(String userEmail, String roleName);
 
+    void deleteRoleToUser(String userEmail, String roleName);
+
     User findByEmail(String email);
 
     void save(User user);

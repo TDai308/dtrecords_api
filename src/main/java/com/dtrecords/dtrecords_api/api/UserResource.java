@@ -28,7 +28,7 @@ public class UserResource {
         return ResponseEntity.ok().body(roleService.findAll());
     }
 
-    @GetMapping("/users")
+    @GetMapping("/admin/users")
     public ResponseEntity<List<User>> listAllUser() {
         List<User> users = userService.findAll();
         if (users.isEmpty()) {
@@ -74,7 +74,29 @@ public class UserResource {
         return new ResponseEntity<User>(currentUser.get(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/user/{id}")
+    @PutMapping("/admin/user/setAdmin/{id}")
+    public ResponseEntity<User> setAdminRole(@PathVariable Long id) {
+        Optional<User> user = userService.findById(id);
+        if (!user.isPresent()) {
+            System.out.println("User with id " + id + " not found");
+            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+        }
+        userService.addRoleToUser(user.get().getEmail(),"ROLE_ADMIN");
+        return new ResponseEntity<User>(user.get(), HttpStatus.OK);
+    }
+
+    @PutMapping("/admin/user/removeAdmin/{id}")
+    public ResponseEntity<User> removeAdminRole(@PathVariable Long id) {
+        Optional<User> user = userService.findById(id);
+        if (!user.isPresent()) {
+            System.out.println("User with id " + id + " not found");
+            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+        }
+        userService.deleteRoleToUser(user.get().getEmail(),"ROLE_ADMIN");
+        return new ResponseEntity<User>(user.get(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/admin/user/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable Long id) {
         Optional<User> user = userService.findById(id);
         if (!user.isPresent()) {
