@@ -56,9 +56,12 @@ public class VinylResource {
     }
 
     @GetMapping("/vinyls")
-    public ResponseEntity<Page<Vinyl>> getVinyls(Pageable pageable,@RequestParam(required = false) int page, @RequestParam(required = false) int size, @RequestParam(required = false) String sort, @RequestParam(required = false) String direction) {
+    public ResponseEntity<Page<Vinyl>> getVinyls(Pageable pageable,@RequestParam(required = false) int page, @RequestParam(required = false) int size, @RequestParam(required = false) String sort, @RequestParam(required = false) String direction, @RequestParam(name = "s", required = false) Optional<String> searchVinyl) {
         pageable = checkTheSort(pageable,page,size,sort,direction);
-        Page<Vinyl> vinyls = vinylService.findAll(pageable);
+        Page<Vinyl> vinyls;
+        if (searchVinyl.isPresent()) {
+            vinyls = vinylService.findAllByVinylName(searchVinyl.get(), pageable);
+        } else vinyls = vinylService.findAll(pageable);
         return new ResponseEntity<Page<Vinyl>>(vinyls, HttpStatus.OK);
     }
 

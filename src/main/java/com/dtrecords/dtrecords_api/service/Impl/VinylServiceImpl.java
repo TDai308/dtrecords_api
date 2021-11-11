@@ -28,6 +28,11 @@ public class VinylServiceImpl implements VinylService {
     }
 
     @Override
+    public Page<Vinyl> findAllByVinylName(String vinylName, Pageable pageable) {
+        return vinylRepository.findAllByVinylName(vinylName,pageable);
+    }
+
+    @Override
     public Page<Vinyl> findAllByDiscountGreaterThan(Long discount, Pageable pageable) {
         return vinylRepository.findAllByDiscountGreaterThan(discount,pageable);
     }

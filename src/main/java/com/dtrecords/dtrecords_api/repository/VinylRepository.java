@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface VinylRepository extends JpaRepository<Vinyl, Long> {
     Page<Vinyl> findAll(Pageable pageable);
 
+    Page<Vinyl> findAllByVinylName(String vinylName, Pageable pageable);
+
     Page<Vinyl> findAllByDiscountGreaterThan(Long discount, Pageable pageable);
 
     Page<Vinyl> findAllByRealPriceLessThanEqual(Double realPrice, Pageable pageable);

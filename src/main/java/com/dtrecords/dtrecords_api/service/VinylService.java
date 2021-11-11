@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface VinylService extends GeneralService<Vinyl>{
     Page<Vinyl> findAll(Pageable pageable);
 
+    Page<Vinyl> findAllByVinylName(String vinylName, Pageable pageable);
+
     Page<Vinyl> findAllByDiscountGreaterThan(Long discount, Pageable pageable);
 
     Page<Vinyl> findAllByRealPriceLessThanEqual(Double realPrice, Pageable pageable);
