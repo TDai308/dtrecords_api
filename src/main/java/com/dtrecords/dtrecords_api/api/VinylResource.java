@@ -70,6 +70,16 @@ public class VinylResource {
         return new ResponseEntity<Iterable<Vinyl>>(vinylService.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/vinylList/top10BestSeller")
+    public ResponseEntity<Iterable<Vinyl>> getBestSellerVinyls() {
+        return new ResponseEntity<Iterable<Vinyl>>(vinylService.findTop10ByQuantityBetweenOrderByIdDesc(1L, 10L), HttpStatus.OK);
+    }
+
+    @GetMapping("/vinylList/saleOffVinyls")
+    public ResponseEntity<Iterable<Vinyl>> getSaleOffVinyls() {
+        return new ResponseEntity<Iterable<Vinyl>>(vinylService.findAllByDiscountAfterAndQuantityAfterOrderByIdDesc(0L, 0L), HttpStatus.OK);
+    }
+
     @GetMapping("/vinyls/{productsOption}")
     public ResponseEntity<Page<Vinyl>> getVinylsOption(Pageable pageable,@RequestParam(required = false) int page, @RequestParam(required = false) int size, @RequestParam(required = false) String sort, @RequestParam(required = false) String direction, @PathVariable(name = "productsOption") String productsOption) {
         pageable = checkTheSort(pageable,page,size,sort,direction);

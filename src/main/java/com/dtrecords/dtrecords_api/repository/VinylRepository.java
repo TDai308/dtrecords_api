@@ -10,6 +10,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface VinylRepository extends JpaRepository<Vinyl, Long> {
     Page<Vinyl> findAll(Pageable pageable);
 
+    Iterable<Vinyl> findTop10ByQuantityBetweenOrderByIdDesc(Long quantity, Long quantity2);
+
+    Iterable<Vinyl> findAllByDiscountAfterAndQuantityAfterOrderByIdDesc(Long discount, Long quantity);
+
     Page<Vinyl> findAllByVinylName(String vinylName, Pageable pageable);
 
     Page<Vinyl> findAllByDiscountGreaterThan(Long discount, Pageable pageable);

@@ -11,6 +11,10 @@ import java.util.Optional;
 public interface VinylService extends GeneralService<Vinyl>{
     Page<Vinyl> findAll(Pageable pageable);
 
+    Iterable<Vinyl> findTop10ByQuantityBetweenOrderByIdDesc(Long quantity, Long quantity2);
+
+    Iterable<Vinyl> findAllByDiscountAfterAndQuantityAfterOrderByIdDesc(Long discount, Long quantity);
+
     Page<Vinyl> findAllByVinylName(String vinylName, Pageable pageable);
 
     Page<Vinyl> findAllByDiscountGreaterThan(Long discount, Pageable pageable);
@@ -22,8 +26,6 @@ public interface VinylService extends GeneralService<Vinyl>{
     Page<Vinyl> findAllByNation(Nation nation, Pageable pageable);
 
     Page<Vinyl> findAllByGenre(Genre genre, Pageable pageable, String sort, String direction);
-
-    Iterable<Vinyl> findAllWithList();
 
     Optional<Vinyl> findById(Long id);
 

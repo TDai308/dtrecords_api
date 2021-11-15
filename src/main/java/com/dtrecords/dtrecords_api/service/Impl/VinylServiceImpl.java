@@ -28,6 +28,16 @@ public class VinylServiceImpl implements VinylService {
     }
 
     @Override
+    public Iterable<Vinyl> findTop10ByQuantityBetweenOrderByIdDesc(Long quantity, Long quantity2) {
+        return vinylRepository.findTop10ByQuantityBetweenOrderByIdDesc(quantity,quantity2);
+    }
+
+    @Override
+    public Iterable<Vinyl> findAllByDiscountAfterAndQuantityAfterOrderByIdDesc(Long discount, Long quantity) {
+        return vinylRepository.findAllByDiscountAfterAndQuantityAfterOrderByIdDesc(discount, quantity);
+    }
+
+    @Override
     public Page<Vinyl> findAllByVinylName(String vinylName, Pageable pageable) {
         return vinylRepository.findAllByVinylName(vinylName,pageable);
     }
@@ -83,11 +93,6 @@ public class VinylServiceImpl implements VinylService {
             }
         }
         return new PageImpl<Vinyl>(VinylsWithTheSameGenre.subList(start,end), pageable , VinylsWithTheSameGenre.size());
-    }
-
-    @Override
-    public Iterable<Vinyl> findAllWithList() {
-        return vinylRepository.findAll();
     }
 
     @Override
