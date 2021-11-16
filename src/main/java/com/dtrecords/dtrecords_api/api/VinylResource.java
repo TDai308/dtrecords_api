@@ -109,28 +109,28 @@ public class VinylResource {
             case "KoreanVinyls":
                 vinyls = vinylService.findAllByNation(nationService.findByNation("Hàn Quốc"), pageable);
                 break;
-            case "popVinyl":
+            case "PopVinyl":
                 vinyls = vinylService.findAllByGenre(genreService.findByGenreName("Pop"), pageable, sort, direction);
                 break;
-            case "rockVinyl":
+            case "RockVinyl":
                 vinyls = vinylService.findAllByGenre(genreService.findByGenreName("Rock"), pageable, sort, direction);
                 break;
-            case "r&bVinyl":
+            case "R&BVinyl":
                 vinyls = vinylService.findAllByGenre(genreService.findByGenreName("R&B"), pageable, sort, direction);
                 break;
-            case "hiphopVinyl":
+            case "HipHopVinyl":
                 vinyls = vinylService.findAllByGenre(genreService.findByGenreName("HipHop"), pageable, sort, direction);
                 break;
-            case "countryVinyl":
+            case "CountryVinyl":
                 vinyls = vinylService.findAllByGenre(genreService.findByGenreName("Country"), pageable, sort, direction);
                 break;
-            case "edmVinyl":
+            case "EDMVinyl":
                 vinyls = vinylService.findAllByGenre(genreService.findByGenreName("EDM"), pageable, sort, direction);
                 break;
-            case "indieVinyl":
+            case "IndieVinyl":
                 vinyls = vinylService.findAllByGenre(genreService.findByGenreName("Indie"), pageable, sort, direction);
                 break;
-            case "jazzVinyl":
+            case "JazzVinyl":
                 vinyls = vinylService.findAllByGenre(genreService.findByGenreName("Jazz"), pageable, sort, direction);
                 break;
         }
