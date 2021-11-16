@@ -22,6 +22,11 @@ public class ArtistResource {
         return new ResponseEntity<Iterable<Artist>>(artistService.findAll(), HttpStatus.OK);
     };
 
+    @GetMapping("/artists/random5Artists")
+    public ResponseEntity<Iterable<Artist>> get5RandomArtists() {
+        return new ResponseEntity<Iterable<Artist>>(artistService.findRandomArtists(), HttpStatus.OK);
+    };
+
     @PostMapping("/admin/artist")
     public ResponseEntity<Void> addNewArtist(@RequestParam("newArtist") String newArtist) {
         System.out.println(newArtist);
