@@ -28,8 +28,8 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public Iterable<Artist> findRandomArtists() {
-        return artistRepository.findRandomArtists();
+    public Iterable<Artist> findRandomArtists(Integer limitNum) {
+        return artistRepository.findRandomArtists(limitNum);
     }
 
 

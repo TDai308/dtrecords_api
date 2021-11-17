@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface ArtistService extends GeneralService<Artist>{
     Iterable<Artist> findAll();
 
-    Iterable<Artist> findRandomArtists();
+    Iterable<Artist> findRandomArtists(Integer limitNum);
 
     Optional<Artist> findById(Long id);
 

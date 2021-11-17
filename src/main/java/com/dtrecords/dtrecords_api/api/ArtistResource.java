@@ -24,7 +24,7 @@ public class ArtistResource {
 
     @GetMapping("/artists/random5Artists")
     public ResponseEntity<Iterable<Artist>> get5RandomArtists() {
-        return new ResponseEntity<Iterable<Artist>>(artistService.findRandomArtists(), HttpStatus.OK);
+        return new ResponseEntity<Iterable<Artist>>(artistService.findRandomArtists(5), HttpStatus.OK);
     };
 
     @PostMapping("/admin/artist")
