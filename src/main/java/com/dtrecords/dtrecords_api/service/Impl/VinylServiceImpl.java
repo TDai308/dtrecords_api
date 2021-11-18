@@ -1,5 +1,6 @@
 package com.dtrecords.dtrecords_api.service.Impl;
 
+import com.dtrecords.dtrecords_api.domain.Artist;
 import com.dtrecords.dtrecords_api.domain.Genre;
 import com.dtrecords.dtrecords_api.domain.Nation;
 import com.dtrecords.dtrecords_api.domain.Vinyl;
@@ -30,6 +31,11 @@ public class VinylServiceImpl implements VinylService {
     @Override
     public Iterable<Vinyl> findTop10ByQuantityBetweenOrderByIdDesc(Long quantity, Long quantity2) {
         return vinylRepository.findTop10ByQuantityBetweenOrderByIdDesc(quantity,quantity2);
+    }
+
+    @Override
+    public Iterable<Vinyl> findAllByArtistAndIdNotLikeAndQuantityAfter(Artist artist, Long id, Long quantity) {
+        return vinylRepository.findAllByArtistAndIdNotLikeAndQuantityAfter(artist,id,quantity);
     }
 
     @Override
@@ -93,6 +99,20 @@ public class VinylServiceImpl implements VinylService {
             }
         }
         return new PageImpl<Vinyl>(VinylsWithTheSameGenre.subList(start,end), pageable , VinylsWithTheSameGenre.size());
+    }
+
+    @Override
+    public List<Vinyl> findAllByTheSameGenreVinyl(Vinyl vinyl) {
+        List<Vinyl> theSameGenreVinyls = new ArrayList<>();
+        List<Vinyl> vinyls = vinylRepository.findAll();
+        for (Genre genre : vinyl.getGenres()) {
+            vinyls.forEach(v -> {
+                if (v.getGenres().contains(genre) && v.getQuantity() > 0 && v!= vinyl) {
+                    theSameGenreVinyls.add(v);
+                }
+            });
+        }
+        return theSameGenreVinyls;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.dtrecords.dtrecords_api.repository;
 
+import com.dtrecords.dtrecords_api.domain.Artist;
 import com.dtrecords.dtrecords_api.domain.Genre;
 import com.dtrecords.dtrecords_api.domain.Nation;
 import com.dtrecords.dtrecords_api.domain.Vinyl;
@@ -11,6 +12,8 @@ public interface VinylRepository extends JpaRepository<Vinyl, Long> {
     Page<Vinyl> findAll(Pageable pageable);
 
     Iterable<Vinyl> findTop10ByQuantityBetweenOrderByIdDesc(Long quantity, Long quantity2);
+
+    Iterable<Vinyl> findAllByArtistAndIdNotLikeAndQuantityAfter(Artist artist, Long id, Long quantity);
 
     Iterable<Vinyl> findAllByDiscountAfterAndQuantityAfterOrderByIdDesc(Long discount, Long quantity);
 
