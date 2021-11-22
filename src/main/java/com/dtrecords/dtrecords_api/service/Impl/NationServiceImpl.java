@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,11 @@ public class NationServiceImpl implements NationService {
     @Override
     public Nation findByNation(String nation) {
         return nationRepository.findByNation(nation);
+    }
+
+    @Override
+    public Optional<Nation> findById(Long id) {
+        return nationRepository.findById(id);
     }
 
     @Override

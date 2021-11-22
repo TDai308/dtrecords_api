@@ -2,6 +2,7 @@ package com.dtrecords.dtrecords_api.api;
 
 import com.dtrecords.dtrecords_api.domain.Artist;
 import com.dtrecords.dtrecords_api.domain.Genre;
+import com.dtrecords.dtrecords_api.domain.Nation;
 import com.dtrecords.dtrecords_api.domain.Vinyl;
 import com.dtrecords.dtrecords_api.service.GenreService;
 import com.dtrecords.dtrecords_api.service.NationService;
@@ -92,6 +93,18 @@ public class VinylResource {
         return new ResponseEntity<Iterable<Vinyl>>(vinylService.findAllByArtistAndIdNotLikeAndQuantityAfter(artist, id, 0L), HttpStatus.OK);
     }
 
+    @GetMapping("/vinylList/{idVinyl}/{idNation}")
+    public ResponseEntity<Iterable<Vinyl>> getVinylsWithTheSameNation(@PathVariable("idVinyl") Long idVinyl, @PathVariable("idNation") Long idNation) {
+        Optional<Vinyl> vinyl = vinylService.findById(idVinyl);
+        Optional<Nation> nation = nationService.findById(idNation);
+        if (vinyl.isPresent() && nation.isPresent()) {
+            return new ResponseEntity<Iterable<Vinyl>>(vinylService.findAllByNationAndIdNotLike(nation.get(), vinyl.get().getId()), HttpStatus.OK);
+        } else {
+            System.out.println("Vinyl or nation are not found");
+            return new ResponseEntity<Iterable<Vinyl>>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/vinylList/{id}/theSameGenreVinyls")
     public ResponseEntity<List<Vinyl>> getVinylsSameGenre(@PathVariable("id") Long id) {
         Optional<Vinyl> vinyl = vinylService.findById(id);
@@ -100,8 +113,6 @@ public class VinylResource {
             return new ResponseEntity<List<Vinyl>>(HttpStatus.NOT_FOUND);
         }
         List<Vinyl> vinylWithTheSameGenre = vinylService.findAllByTheSameGenreVinyl(vinyl.get());
-        System.out.println("hahahah");
-        System.out.println(vinylWithTheSameGenre);
         return new ResponseEntity<List<Vinyl>>(vinylWithTheSameGenre, HttpStatus.OK);
     }
 

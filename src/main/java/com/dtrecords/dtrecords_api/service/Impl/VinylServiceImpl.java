@@ -44,6 +44,11 @@ public class VinylServiceImpl implements VinylService {
     }
 
     @Override
+    public Iterable<Vinyl> findAllByNationAndIdNotLike(Nation nation, Long id) {
+        return vinylRepository.findAllByNationAndIdNotLike(nation, id);
+    }
+
+    @Override
     public Page<Vinyl> findAllByVinylName(String vinylName, Pageable pageable) {
         return vinylRepository.findAllByVinylName(vinylName,pageable);
     }
