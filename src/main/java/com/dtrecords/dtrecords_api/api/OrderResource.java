@@ -57,7 +57,6 @@ public class OrderResource {
         CustomerInformation customer = objectMapper.readValue(customerInformationJson, CustomerInformation.class);
         System.out.println(customer.getCustomerName());
         Long OrderId = null;
-//        float totalPrice = 0;
         for (final Cart cart: cartList) {
             Order order = new Order();
             order.setCustomerName(customer.getCustomerName());

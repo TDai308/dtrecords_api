@@ -14,7 +14,15 @@ import java.util.Collection;
 @AllArgsConstructor
 public class Vinyl {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "vinyl_sequence",
+            sequenceName = "vinyl_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "vinyl_sequence"
+    )
     private Long id;
     private String vinylName;
 

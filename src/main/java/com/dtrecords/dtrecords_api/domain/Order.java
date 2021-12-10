@@ -13,7 +13,15 @@ import javax.persistence.*;
 @Table(name = "orders")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "order_sequence",
+            sequenceName = "order_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "order_sequence"
+    )
     private Long id;
     private String customerName;
     private String customerPhone;

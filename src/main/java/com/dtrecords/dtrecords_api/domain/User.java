@@ -3,6 +3,7 @@ package com.dtrecords.dtrecords_api.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,9 +13,21 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+//khi kết nối với mysql thì bỏ table này đi
+@Table(name = "users")
 public class User {
+
+    //id bên mysql đang ăn theo hibernate nên nếu kết nối với mysql thì đổi thành auto
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "users_sequence",
+            sequenceName = "users_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "users_sequence"
+    )
     private Long id;
     private String name;
     private String userName;

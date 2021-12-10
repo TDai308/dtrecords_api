@@ -12,7 +12,15 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Track {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "track_sequence",
+            sequenceName = "track_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "track_sequence"
+    )
     private Long id;
     private String trackName;
     private String artists;
