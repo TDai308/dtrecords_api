@@ -1,1 +1,1 @@
-web: java -jar build/libs/rate-0.0.1-SNAPSHOT.jar
+web: java -jar build/libs/dtrecords_api-0.0.1-SNAPSHOT.jar
