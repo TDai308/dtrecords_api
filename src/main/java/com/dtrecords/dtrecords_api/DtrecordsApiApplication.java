@@ -23,6 +23,8 @@ public class DtrecordsApiApplication {
 //    @Bean
 //    CommandLineRunner run(UserService userService, RoleService roleService) {
 //        return args -> {
+//            userService.save(new User(null,"Bruce Wayne","Batman","1234","0123456789","batman123@gmail.com","Gotham City",new ArrayList<>()));
+//
 //            roleService.save(new Role(null,"ROLE_USER"));
 //            roleService.save(new Role(null,"ROLE_ADMIN"));
 //
