@@ -7,6 +7,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
 
-    @Query(nativeQuery = true, value = "select * from artist order by rand() limit :limitNum")
+    @Query(nativeQuery = true, value = "select * from artist order by random() limit :limitNum")
     Iterable<Artist> findRandomArtists(@Param("limitNum") Integer limitNum);
 }

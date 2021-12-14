@@ -7,12 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +16,6 @@ import java.util.Random;
 @Slf4j
 public class ArtistServiceImpl implements ArtistService {
     private final ArtistRepository artistRepository;
-    private final EntityManager entityManager;
 
     @Override
     public Iterable<Artist> findAll() {
