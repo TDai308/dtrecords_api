@@ -1,5 +1,8 @@
 package com.dtrecords.dtrecords_api;
 
+import com.dtrecords.dtrecords_api.domain.Nation;
+import com.dtrecords.dtrecords_api.service.NationService;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -14,16 +17,11 @@ public class DtrecordsApiApplication {
     }
 
 //    @Bean
-//    CommandLineRunner run(ArtistService artistService, GenreService genreService) {
+//    CommandLineRunner run(NationService nationService) {
 //        return args -> {
-//            genreService.save(new Genre(null, "Pop"));
-//            genreService.save(new Genre(null, "Rock"));
-//            genreService.save(new Genre(null, "R&B"));
-//            genreService.save(new Genre(null, "HipHop"));
-//            genreService.save(new Genre(null, "Country"));
-//            genreService.save(new Genre(null, "EDM"));
-//            genreService.save(new Genre(null, "Indie"));
-//            genreService.save(new Genre(null, "Jazz"));
+//            nationService.save(new Nation(null, "Việt Nam"));
+//            nationService.save(new Nation(null, "Mỹ"));
+//            nationService.save(new Nation(null, "Hàn Quốc"));
 //        };
 //    }
 
