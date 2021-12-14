@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://detran-records.netlify.app")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor

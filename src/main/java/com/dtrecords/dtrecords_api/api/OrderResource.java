@@ -35,7 +35,7 @@ class CustomerInformation {
     private String customerAddress;
 }
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://detran-records.netlify.app")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
