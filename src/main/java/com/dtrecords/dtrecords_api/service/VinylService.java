@@ -17,9 +17,13 @@ public interface VinylService extends GeneralService<Vinyl>{
 
     Iterable<Vinyl> findAllByArtistAndIdNotLikeAndQuantityAfter(Artist artist, Long id, Long quantity);
 
+    Iterable<Vinyl> findAllByArtistAndQuantityAfterWithoutCurrentVinyl(Artist artist, Long id, Long quantity);
+
     Iterable<Vinyl> findAllByDiscountAfterAndQuantityAfterOrderByIdDesc(Long discount, Long quantity);
 
     Iterable<Vinyl> findAllByNationAndIdNotLike(Nation nation, Long id);
+
+    Iterable<Vinyl> findAllByTheSameNationWithoutCurrentVinyl(Nation nation, Long id);
 
     Page<Vinyl> findAllByVinylName(String vinylName, Pageable pageable);
 

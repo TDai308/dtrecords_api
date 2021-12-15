@@ -90,15 +90,16 @@ public class VinylResource {
         if (vinyl.isPresent()) {
             artist = vinyl.get().getArtist();
         }
-        return new ResponseEntity<Iterable<Vinyl>>(vinylService.findAllByArtistAndIdNotLikeAndQuantityAfter(artist, id, 0L), HttpStatus.OK);
+        return new ResponseEntity<Iterable<Vinyl>>(vinylService.findAllByArtistAndQuantityAfterWithoutCurrentVinyl(artist, id, 0L), HttpStatus.OK);
     }
 
     @GetMapping("/vinylList/{idVinyl}/{idNation}")
     public ResponseEntity<Iterable<Vinyl>> getVinylsWithTheSameNation(@PathVariable("idVinyl") Long idVinyl, @PathVariable("idNation") Long idNation) {
         Optional<Vinyl> vinyl = vinylService.findById(idVinyl);
         Optional<Nation> nation = nationService.findById(idNation);
+        System.out.println(nation);
         if (vinyl.isPresent() && nation.isPresent()) {
-            return new ResponseEntity<Iterable<Vinyl>>(vinylService.findAllByNationAndIdNotLike(nation.get(), vinyl.get().getId()), HttpStatus.OK);
+            return new ResponseEntity<Iterable<Vinyl>>(vinylService.findAllByTheSameNationWithoutCurrentVinyl(nation.get(), vinyl.get().getId()), HttpStatus.OK);
         } else {
             System.out.println("Vinyl or nation are not found");
             return new ResponseEntity<Iterable<Vinyl>>(HttpStatus.NOT_FOUND);

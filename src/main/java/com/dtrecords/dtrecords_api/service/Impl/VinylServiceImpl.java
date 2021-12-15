@@ -35,7 +35,19 @@ public class VinylServiceImpl implements VinylService {
 
     @Override
     public Iterable<Vinyl> findAllByArtistAndIdNotLikeAndQuantityAfter(Artist artist, Long id, Long quantity) {
-        return vinylRepository.findAllByArtistAndIdNotLikeAndQuantityAfter(artist,id,quantity);
+        return vinylRepository.findAllByArtistAndIdNotLikeAndQuantityAfter(artist, id, quantity);
+    }
+
+    @Override
+    public Iterable<Vinyl> findAllByArtistAndQuantityAfterWithoutCurrentVinyl(Artist artist, Long id, Long quantity) {
+        List<Vinyl> theSameNationVinyls = new ArrayList<>();
+        Iterable<Vinyl> theSameArtist = vinylRepository.findAllByArtistAndQuantityAfter(artist, quantity);
+        for (Vinyl vinyl : theSameArtist) {
+            if (!vinyl.getId().equals(id)) {
+                theSameNationVinyls.add(vinyl);
+            }
+        }
+        return theSameNationVinyls;
     }
 
     @Override
@@ -45,7 +57,19 @@ public class VinylServiceImpl implements VinylService {
 
     @Override
     public Iterable<Vinyl> findAllByNationAndIdNotLike(Nation nation, Long id) {
-        return vinylRepository.findAllByNationAndIdNotLike(nation, id);
+        return vinylRepository.findAllByNationAndIdNotLike(nation,id);
+    }
+
+    @Override
+    public Iterable<Vinyl> findAllByTheSameNationWithoutCurrentVinyl(Nation nation, Long id) {
+        List<Vinyl> theSameNationVinyls = new ArrayList<>();
+        Iterable<Vinyl> theSameNation = vinylRepository.findAllByNation(nation);
+        for (Vinyl vinyl :theSameNation) {
+            if (!vinyl.getId().equals(id)) {
+                theSameNationVinyls.add(vinyl);
+            }
+        }
+        return theSameNationVinyls;
     }
 
     @Override
