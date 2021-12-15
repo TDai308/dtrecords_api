@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "https://detran-records.netlify.app")
+@CrossOrigin(origins = {"https://detran-records.netlify.app", "http://localhost:3000"})
 public class NationResource {
     private final NationService nationService;
 

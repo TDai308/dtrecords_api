@@ -22,7 +22,7 @@ import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Optional;
 
-@CrossOrigin(origins = "https://detran-records.netlify.app")
+@CrossOrigin(origins = {"https://detran-records.netlify.app", "http://localhost:3000"})
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor

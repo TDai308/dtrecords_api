@@ -28,7 +28,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
-@CrossOrigin(origins = "https://detran-records.netlify.app")
+@CrossOrigin(origins = {"https://detran-records.netlify.app", "http://localhost:3000"})
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor

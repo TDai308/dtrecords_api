@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@CrossOrigin(origins = "https://detran-records.netlify.app")
+@CrossOrigin(origins = {"https://detran-records.netlify.app", "http://localhost:3000"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -20,12 +20,12 @@ public class ArtistResource {
     @GetMapping("/artists")
     public ResponseEntity<Iterable<Artist>> getArtists() {
         return new ResponseEntity<Iterable<Artist>>(artistService.findAll(), HttpStatus.OK);
-    };
+    }
 
     @GetMapping("/artists/random5Artists")
     public ResponseEntity<Iterable<Artist>> get5RandomArtists() {
         return new ResponseEntity<Iterable<Artist>>(artistService.findRandomArtists(5), HttpStatus.OK);
-    };
+    }
 
     @PostMapping("/admin/artist")
     public ResponseEntity<Void> addNewArtist(@RequestParam("newArtist") String newArtist) {
